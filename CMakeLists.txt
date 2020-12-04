@@ -1,0 +1,21 @@
+cmake_minimum_required(VERSION 3.17)
+project(TP_IoT)
+
+set(CMAKE_CXX_STANDARD 14)
+include(FetchContent)
+FetchContent_Declare(json GIT_REPOSITORY https://github.com/nlohmann/json.git GIT_TAG v3.7.3)
+FetchContent_GetProperties(json)
+if(NOT json_POPULATED)
+    FetchContent_Populate(json)
+    add_subdirectory(${json_SOURCE_DIR} ${json_BINARY_DIR} EXCLUDE_FROM_ALL)
+endif()
+find_package(SDL2 REQUIRED)
+find_library(SDL2TTF_LIBRARIES sdl_ttf)
+
+include_directories(${SDL2_INCLUDE_DIRS} ${SDL2TTF_INCLUDE_DIRS})
+include_directories(include)
+include_directories(fonts)
+
+add_executable(TP_IoT main.cpp src/Server.cpp include/Server.h src/Client.cpp include/Client.h src/TPViewWindow.cpp include/TPViewWindow.h src/Point.cpp include/Point.h)
+target_link_libraries(TP_IoT ${SDL2_LIBRARIES} ${SDL2TTF_LIBRARIES})
+target_link_libraries(TP_IoT nlohmann_json::nlohmann_json)
